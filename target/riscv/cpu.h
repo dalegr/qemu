@@ -125,6 +125,8 @@ struct CPURISCVState {
     target_ulong *mstatus;
 
     target_ulong mip;
+    target_ulong mip_novirt;
+
     uint32_t miclaim;
 
     target_ulong *mie;
@@ -161,7 +163,7 @@ struct CPURISCVState {
 
     /* Virtual CSRs */
     target_ulong vsstatus;
-    uint32_t vsip;
+    target_ulong vsip;
     target_ulong vsie;
     target_ulong vstvec;
     target_ulong vsscratch;
@@ -169,6 +171,14 @@ struct CPURISCVState {
     target_ulong vscause;
     target_ulong vstval;
     target_ulong vsatp;
+
+    /* HS Backup CSRs */
+    target_ulong stvec_hs;
+    target_ulong sscratch_hs;
+    target_ulong sepc_hs;
+    target_ulong scause_hs;
+    target_ulong stval_hs;
+    target_ulong satp_hs;
 
     target_ulong scounteren;
     target_ulong mcounteren;
@@ -300,6 +310,7 @@ void riscv_cpu_list(void);
 #define cpu_mmu_index riscv_cpu_mmu_index
 
 #ifndef CONFIG_USER_ONLY
+void riscv_cpu_swap_hypervisor_regs(CPURISCVState *env);
 int riscv_cpu_claim_interrupts(RISCVCPU *cpu, uint32_t interrupts);
 uint32_t riscv_cpu_update_mip(RISCVCPU *cpu, uint32_t mask, uint32_t value);
 #define BOOL_TO_MASK(x) (-!!(x)) /* helper for riscv_cpu_update_mip value */
