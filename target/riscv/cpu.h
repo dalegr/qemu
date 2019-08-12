@@ -127,6 +127,10 @@ struct CPURISCVState {
     target_ulong mip;
     target_ulong mip_novirt;
 
+#ifdef TARGET_RISCV32
+    target_ulong *mstatush;
+#endif
+
     uint32_t miclaim;
 
     target_ulong *mie;
@@ -154,6 +158,9 @@ struct CPURISCVState {
      */
     target_ulong mie_novirt;
     target_ulong mstatus_novirt;
+#ifdef TARGET_RISCV32
+    target_ulong mstatush_novirt;
+#endif
 
     /* Hypervisor CSRs */
     target_ulong hstatus;
