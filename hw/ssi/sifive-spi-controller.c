@@ -25,6 +25,7 @@
 
 #include "qemu/osdep.h"
 #include "qemu/log.h"
+#include "migration/vmstate.h"
 #include "hw/ssi/sifive-spi-controller.h"
 
 #ifndef SIFIVE_SPI_ERR_DEBUG
@@ -279,7 +280,7 @@ static void sifive_spi_class_init(ObjectClass *klass, void *data)
     dc->realize = sifive_spi_realize;
     dc->reset = sifive_spi_reset;
     dc->vmsd = &vmstate_sifive;
-    dc->props = sifive_spi_properties;
+    device_class_set_props(dc, sifive_spi_properties);
 }
 
 static const TypeInfo sifive_spi_info = {

@@ -30,6 +30,8 @@
 #include "hw/hw.h"
 #include "hw/ssi/ssi.h"
 #include "qemu/fifo8.h"
+#include "hw/irq.h"
+#include "hw/qdev-properties.h"
 
 #define TYPE_SIFIVE_SPI "sifive-spi"
 #define SIFIVE_SPI(obj) \

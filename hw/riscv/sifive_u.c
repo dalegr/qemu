@@ -191,6 +191,7 @@ static void create_fdt(SiFiveUState *s, const struct MemmapEntry *memmap,
         cells[cpu * 4 + 3] = cpu_to_be32(IRQ_M_TIMER);
         g_free(nodename);
     }
+
     nodename = g_strdup_printf("/soc/clint@%lx",
         (long)memmap[SIFIVE_U_CLINT].base);
     qemu_fdt_add_subnode(fdt, nodename);
@@ -296,9 +297,9 @@ static void create_fdt(SiFiveUState *s, const struct MemmapEntry *memmap,
     qemu_fdt_setprop_cells(fdt, nodename, "#clock-cells", 0);
     qemu_fdt_setprop_cells(fdt, nodename, "clock-frequency", 0x1fca055);
     qemu_fdt_setprop_string(fdt, nodename, "clock-output-names", "xtal");
-    qemu_fdt_setprop_cells(fdt, nodename, "phandle", 0x9);
-    qemu_fdt_setprop_cells(fdt, nodename, "linux,phandle", 0x9);
-    refclk_phandle = qemu_fdt_get_phandle(fdt, nodename);
+    qemu_fdt_setprop_cells(fdt, nodename, "phandle", prci_phandle);
+    qemu_fdt_setprop_cells(fdt, nodename, "linux,phandle", prci_phandle);
+    uint32_t refclk_phandle = qemu_fdt_get_phandle(fdt, nodename);
     g_free(nodename);
 
     nodename = g_strdup_printf("/soc/spi@%lx",
@@ -354,11 +355,15 @@ static void create_fdt(SiFiveUState *s, const struct MemmapEntry *memmap,
         0x0, memmap[SIFIVE_U_SPI2].base,
         0x0, memmap[SIFIVE_U_SPI2].size);
     qemu_fdt_setprop_string(fdt, nodename, "reg-names", "control");
+    qemu_fdt_setprop_cells(fdt, nodename, "spi-max-frequency", 0x1312d00);
     qemu_fdt_setprop_cells(fdt, nodename, "clocks", refclk_phandle);
     qemu_fdt_setprop_cells(fdt, nodename, "interrupt-parent", plic_phandle);
     qemu_fdt_setprop_cells(fdt, nodename, "interrupts", SIFIVE_U_SPI2_IRQ);
     qemu_fdt_setprop_cell(fdt, nodename, "#address-cells", 1);
     qemu_fdt_setprop_cell(fdt, nodename, "#size-cells", 0);
+    // arei: add to device tree.
+    qemu_fdt_setprop_cell(fdt, nodename, "sifive,fifo-depth", 8);
+    qemu_fdt_setprop_cell(fdt, nodename, "sifive,max-bits-per-word", 8);
     g_free(nodename);
 
     nodename = g_strdup_printf("/soc/spi@%lx/mmc@0",

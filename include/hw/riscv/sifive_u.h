@@ -88,7 +88,7 @@ enum {
 enum {
     SIFIVE_U_UART0_IRQ = 4,
     SIFIVE_U_UART1_IRQ = 5,
-    SIFIVE_U_GEM_IRQ = 0x35
+    SIFIVE_U_GEM_IRQ = 0x35,
     SIFIVE_U_SPI0_IRQ = 0x33,
     SIFIVE_U_SPI1_IRQ = 0x34,
     SIFIVE_U_SPI2_IRQ = 6
